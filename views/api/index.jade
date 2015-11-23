@@ -1,0 +1,79 @@
+extends ../layout
+
+block content
+  #hero-page.jumbotron.text-center.abel
+    .container
+      h1.hero-text.animated.fadeInDown
+        | API's
+        input#search.form-control.col-lg-4.input-lg(type='search', value='', placeholder='Search for an API below...')
+    br
+  .container
+    .row
+      .col-lg-12
+        table#table.table
+          thead
+            tr
+              th API Name
+              th Description
+              th Version #
+          tbody
+            tr
+              td: a(href='/api/aviary') Aviary
+              td Aviary API
+              td n/a
+            tr
+              td: a(href='/api/d3') D3
+              td D3 Examples (not an API)
+              td n/a
+            tr
+              td: a(href='/api/clockwork') Clockwork SMS
+              td Clockwork API
+              td n/a
+            tr
+              td: a(href='/api/facebook') Facebook
+              td Facebook API
+              td n/a
+            tr
+              td: a(href='/api/github') GitHub
+              td Github API
+              td n/a
+            tr
+              td: a(href='/api/lastfm') Last.fm
+              td Last.fm API
+              td n/a
+            tr
+              td: a(href='/api/linkedin') LinkedIn
+              td LinkedIn API
+              td n/a
+            tr
+              td: a(href='/api/nyt') New York Times
+              td New York Times API
+              td n/a
+            tr
+              td: a(href='/api/steam') Steam
+              td Steam API
+              td n/a
+            tr
+              td: a(href='/api/stripe') Stripe
+              td Stripe API
+              td n/a
+            tr
+              td: a(href='/api/twilio') Twilio
+              td Twilio API
+              td n/a
+            tr
+              td: a(href='/api/tumblr') Tumblr
+              td Tumblr API
+              td n/a
+            tr
+              td: a(href='/api/twitter') Twitter
+              td Twitter API
+              td n/a
+            tr
+              td: a(href='/api/cheerio') Cheerio
+              td Cheerio API
+              td n/a
+            tr
+              td: a(href='/api/venmo') Venmo
+              td Venmo API
+              td n/a
