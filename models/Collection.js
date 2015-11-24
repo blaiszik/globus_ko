@@ -10,23 +10,35 @@ var tagSchema = new mongoose.Schema({
   _id:false
 })
 
-// var memberSchema = new mongoose.Schema({
-//   "data_type":{type:String, enum: ['collection','KO']},
-//   "_id": Schema.Types.ObjectId
-// })
+var memberSchema = new mongoose.Schema({
+  "data_type":{type:String, enum: ['collection','ko']},
+  "_id": Schema.Types.ObjectId
+})
+
+// var collectionSchema = new mongoose.Schema({
+//   owner:{type:String, lowercase:true},
+//   name:String,
+//   tag:[tagSchema],
+//   uri:['String'],
+//   member:[Schema.Types.ObjectId],
+//   data_type: {type:String, default:"collection"},
+//   date_created: Date,
+//   date_updated: Date
+// });
 
 var collectionSchema = new mongoose.Schema({
   owner:{type:String, lowercase:true},
   name:String,
   tag:[tagSchema],
   uri:['String'],
-  member:[Schema.Types.ObjectId],
+  member:[memberSchema],
   data_type: {type:String, default:"collection"},
   date_created: Date,
   date_updated: Date
 });
 
 collectionSchema.pre('save', function(next) {
+
     if (!this.date_created) {
         this.data_created = new Date();
     }
@@ -34,6 +46,8 @@ collectionSchema.pre('save', function(next) {
     if (!this.date_updated) {
         this.date_updated = new Date();
     }
+
+    console.log('== pre save hook ==')
     next();
 });
 

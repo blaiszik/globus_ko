@@ -2,6 +2,8 @@ var chai = require('chai');
 var should = chai.should();
 var User = require('../models/User');
 var KO = require('../models/KO');
+var assert = require('assert');
+
 
 
 describe('User Model', function() {
@@ -60,28 +62,28 @@ describe('KO Model', function() {
   });
 
     it('Create new multiple ko', function(done) {
-    var ko = new KO([{
-      "key":"mocha_test",
-      "object":2,
-      "owner":"blaiszik",
-      "name":"My New KO",
-      "data":[[1,2,3,4,5],[1,4,9,16,25] ],
-      "tag":[{"key":"a","object":2}, {"key":"b","object":"ben"}]
-    },
-    {
-      "key":"mocha_test",
-      "object":3,
-      "owner":"blaiszik",
-      "name":"My New KO",
-      "data":[[1,2,3,4,5],[1,4,9,16,25] ],
-      "tag":[{"key":"a","object":5}, {"key":"b","object":5}]
-    }
-    ]);
-    ko.save(function(err) {
-      if (err) return done(err);
-      done();
-    })
+    kos = [{
+        "key":"mocha_test",
+        "object":2,
+        "owner":"blaiszik",
+        "name":"My New KO",
+        "data":[[1,2,3,4,5],[1,4,9,16,25] ],
+        "tag":[{"key":"a","object":2}, {"key":"b","object":"ben"}]},
+      {
+        "key":"mocha_test",
+        "object":3,
+        "owner":"blaiszik",
+        "name":"My New KO",
+        "data":[[1,2,3,4,5],[1,4,9,16,25] ],
+        "tag":[{"key":"a","object":5}, {"key":"b","object":5}]
+     }]
+
+    KO.collection.insert(kos, function(err, docs){
+      if (err) { done(err)} 
+      else {done()}
+    });
   });
+
 
   it('Find all ko', function(done) {
     KO.find({}, function(err){
@@ -89,6 +91,30 @@ describe('KO Model', function() {
       done();
     });
   })
+
+  it('Update single ko', function(done) {
+    KO.update({"key":"mocha_test"},{"name":"mochtest"}, function(err,details){
+      if (err) return done(err);
+      assert.equal(1, details.nModified);
+      done();
+    });
+  })
+
+   it('Update multiple ko', function(done) {
+    KO.update({"key":"mocha_test"},{"name":"mochtest"},{ multi: true },  function(err,details){
+      if (err) return done(err);
+      assert.equal(3, details.n);
+      done();
+    });
+  })
+
+  it('Remove mocha_test labeled ko', function(done) {
+    KO.remove({"key":"mocha_test"}, function(err){
+      if (err) return done(err);
+      done();
+    });
+  })
+
 
 
 });

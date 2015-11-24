@@ -3,7 +3,6 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var Schema = mongoose.Schema;
 
-
 var tagSchema = new mongoose.Schema({
   "key":String,
   "object":Schema.Types.Mixed,
@@ -22,7 +21,6 @@ var koSchema = new mongoose.Schema({
   date_created: Date,
   date_updated: Date
 });
-
 
 koSchema.pre('save', function(next) {
     if (!this.date_created) {

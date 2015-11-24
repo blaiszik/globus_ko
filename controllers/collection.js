@@ -15,16 +15,33 @@ var mongoose = require('mongoose');
 // *  PUT /collection/:id -> .update                                  						*
 // *  DELETE /collection/:id -> .destroy    												*
 
+// //Helper functions
+// convert_to_bson = function(arr) {
+//   console.log(arr)
+//   bson_array = []
+//   if (arr.length){
+//   	for (i=0; i<arr.length; i++){
+//   		bson_array.push(mongoose.Types.ObjectId(arr[i]))
+//   	}
+//   	return bson_array;
+//   }
+// }
+
 //Helper functions
 convert_to_bson = function(arr) {
-  console.log(arr)
-  bson_array = []
+  console.log(arr);
+  bson_arr = [];
+
   if (arr.length){
   	for (i=0; i<arr.length; i++){
-  		bson_array.push(mongoose.Types.ObjectId(arr[i]))
+  		converted_id = mongoose.Types.ObjectId(arr[i]._id)
+  		bson_arr.push({"data_type":arr[i].data_type, 
+  						 "_id":mongoose.Types.ObjectId(arr[i]._id)})
   	}
-  	return bson_array;
+  	console.log(bson_arr)
+  	return bson_arr;
   }
+  return false
 }
 
 //Exported functions
@@ -98,7 +115,7 @@ exports.add = function(req,res){
 	member_id = mongoose.Types.ObjectId(req.params.member_id);
 	data_type = req.params.data_type.toLowerCase();
 
-	Collection.update({"_id":collection_id},{$pushAll: {member:[member_id]}},
+	Collection.update({"_id":collection_id},{$pushAll: {member:[{"data_type":data_type, "_id":member_id}]}},
 					  {upsert:true}).exec().
 	then(function(err){
 		if(err) {
@@ -120,6 +137,32 @@ exports.get_member = function(req,res){
 		})
 	})
 }
+
+get_member_recursive = function(member_array){	
+	if (member.data_type == "ko"){
+		return true;
+	}else{
+		KO.find({"_id":{"$in":member.member}}).exec().
+		then(function(ko){
+			console.log(ko)
+		})
+	}
+
+}
+
+// exports.get_member_recursive = function(req, res){
+// 	collection_id = mongoose.Types.ObjectId(req.params.id);
+// 	//Right now collection members can only be KOs, could easily expand to be KOs or other collections
+// 	Collection.findOne({"_id": collection_id}).exec().
+// 	then(function(collection){
+// 		KO.find({"_id":{"$in":collection.member}}).exec().
+// 		then(function(ko){
+// 			res.json(ko)
+// 			console.log(ko)
+// 		})
+// 	});
+// }
+
 
 // exports.checkCatalogPermission = function(req,res){
 // 	catalog_id = mongoose.Types.ObjectId(req.params.catalog_id);
